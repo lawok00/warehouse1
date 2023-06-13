@@ -2,6 +2,8 @@ package com.warehause.warehause1.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table
 public class Device {
@@ -12,6 +14,13 @@ public class Device {
     private String deviceProducer;
     private Float devicePrice;
     private String deviceCategory;
+
+    public Device(Integer deviceId, String deviceProducer, Float devicePrice, String deviceCategory) {
+        this.deviceId = deviceId;
+        this.deviceProducer = deviceProducer;
+        this.devicePrice = devicePrice;
+        this.deviceCategory = deviceCategory;
+    }
 
     public Device() {
     }
@@ -46,5 +55,27 @@ public class Device {
 
     public void setDeviceCategory(String deviceCategory) {
         this.deviceCategory = deviceCategory;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Device device)) return false;
+        return Objects.equals(getDeviceId(), device.getDeviceId()) && Objects.equals(getDeviceProducer(), device.getDeviceProducer()) && Objects.equals(getDevicePrice(), device.getDevicePrice()) && Objects.equals(getDeviceCategory(), device.getDeviceCategory());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getDeviceId(), getDeviceProducer(), getDevicePrice(), getDeviceCategory());
+    }
+
+    @Override
+    public String toString() {
+        return "Device{" +
+                "deviceId=" + deviceId +
+                ", deviceProducer='" + deviceProducer + '\'' +
+                ", devicePrice=" + devicePrice +
+                ", deviceCategory='" + deviceCategory + '\'' +
+                '}';
     }
 }
