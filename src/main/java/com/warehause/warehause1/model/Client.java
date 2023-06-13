@@ -24,6 +24,22 @@ public class Client {
     public Client() {
     }
 
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String clientName) {
+        this.clientName = clientName;
+    }
+
+    public Integer getClientNote() {
+        return clientNote;
+    }
+
+    public void setClientNote(Integer clientNote) {
+        this.clientNote = clientNote;
+    }
+
     public Integer getClientId() {
         return clientId;
     }
