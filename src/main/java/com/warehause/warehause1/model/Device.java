@@ -1,6 +1,13 @@
 package com.warehause.warehause1.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table
 public class Device {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "device_id")
     private Integer deviceId;
     private String deviceProducer;
     private Float devicePrice;

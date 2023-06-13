@@ -1,6 +1,14 @@
 package com.warehause.warehause1.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table
 public class Seller {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "seller_id")
     private Integer sellerId;
     private String sellerName;
     private String sellerLevel;

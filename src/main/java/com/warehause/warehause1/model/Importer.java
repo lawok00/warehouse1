@@ -1,8 +1,19 @@
 package com.warehause.warehause1.model;
 
+
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.*;
+import org.antlr.v4.runtime.misc.NotNull;
+
+@Table
+@Entity
 public class Importer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "impotrer_id")
 private Integer importerId;
-private String importerName;
+
+    private String importerName;
 private String importerProducent;
 
     public Importer() {
