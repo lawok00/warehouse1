@@ -2,11 +2,9 @@ package com.warehause.warehause1.controller;
 
 import com.warehause.warehause1.model.Client;
 import com.warehause.warehause1.service.ClientService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
@@ -32,4 +30,36 @@ public class ClientController {
                 map(clientResponse -> ResponseEntity.ok(clientResponse))
                 .orElseGet(() ->ResponseEntity.notFound().build())                ;
     }
+    @PostMapping
+    public ResponseEntity<Client> postClient(@RequestBody Client requestClient){
+        Client savedClient = clientService.save(requestClient);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(savedClient);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteClient(@PathVariable int id){
+        if(clientService.getClientById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+        }else{
+            clientService.removeById(id);
+            return ResponseEntity.noContent().build();
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Client> updateClient(@PathVariable int id){
+        Client updateClient
+        if(clientService.getClientById(id).isEmpty()){
+            return ResponseEntity.notFound().build();
+            }else{
+            clientService.updateById(id);
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(sav);
+        }
+    }
+
+
 }

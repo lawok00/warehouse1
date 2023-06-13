@@ -21,5 +21,15 @@ public class ClientService{
     public Optional<Client> getClientById(int id){
         return repository.findById(id);
     }
+    public Client save(Client client){
+        return repository.save(client);
+    }
+
+    public void removeById(int id){
+        repository.deleteById(id);
+    }
+    public Client updateById(int id){
+        return repository.s;
+    }
 
 }
