@@ -7,4 +7,12 @@ public class Client {
 
     public Client() {
     }
+
+    public Integer getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Integer clientId) {
+        this.clientId = clientId;
+    }
 }
