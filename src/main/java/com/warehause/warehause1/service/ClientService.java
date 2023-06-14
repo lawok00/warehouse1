@@ -2,9 +2,7 @@ package com.warehause.warehause1.service;
 
 import com.warehause.warehause1.model.Client;
 import com.warehause.warehause1.repository.ClientJpaRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
 
@@ -21,15 +19,19 @@ public class ClientService{
     public Optional<Client> getClientById(int id){
         return repository.findById(id);
     }
-    public Client save(Client client){
-        return repository.save(client);
+    public Optional <Client> saveNew(Client client) {
+        if (client.getClientId() != null && repository.existsById(client.getClientId())) {
+            return Optional.empty();
+        } else {
+            return Optional.of(repository.save(client));
+        }
     }
 
     public void removeById(int id){
         repository.deleteById(id);
     }
-    public Client updateById(int id){
-        return repository.s;
-    }
+//    public Client updateById(int id){
+//        return repository.s;
+//    }
 
 }

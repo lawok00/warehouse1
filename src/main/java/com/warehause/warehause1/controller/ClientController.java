@@ -31,12 +31,18 @@ public class ClientController {
                 .orElseGet(() ->ResponseEntity.notFound().build())                ;
     }
     @PostMapping
-    public ResponseEntity<Client> postClient(@RequestBody Client requestClient){
-        Client savedClient = clientService.save(requestClient);
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(savedClient);
+    public ResponseEntity<Client> postClient(@RequestBody Client requestClient) {
+        Optional <Client> savedClient = clientService.saveNew(requestClient);
+        if (savedClient.isPresent()) {
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(savedClient.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable int id){
@@ -48,18 +54,18 @@ public class ClientController {
         }
     }
 
-    @PatchMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable int id){
-        Client updateClient
-        if(clientService.getClientById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-            }else{
-            clientService.updateById(id);
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(sav);
-        }
-    }
+//    @PatchMapping("/{id}")
+//    public ResponseEntity<Client> updateClient(@PathVariable int id){
+//        Client updateClient
+//        if(clientService.getClientById(id).isEmpty()){
+//            return ResponseEntity.notFound().build();
+//            }else{
+//            clientService.updateById(id);
+//            return ResponseEntity
+//                    .status(HttpStatus.CREATED)
+//                    .body(sav);
+//        }
+//    }
 
 
 }
