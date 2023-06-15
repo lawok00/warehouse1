@@ -2,7 +2,9 @@ package com.warehause.warehause1.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table
@@ -15,6 +17,19 @@ public class Seller {
     private String sellerName;
     private String sellerLevel;
     private Integer sellerAge;
+
+    public Importer getImporter() {
+        return importer;
+    }
+
+    public void setImporter(Importer importer) {
+        this.importer = importer;
+    }
+
+    @OneToOne
+    @JoinColumn(name = "i_id")
+    private Importer importer;
+
 
     public Seller(Integer sellerId, String sellerName, String sellerLevel, Integer sellerAge) {
         this.sellerId = sellerId;

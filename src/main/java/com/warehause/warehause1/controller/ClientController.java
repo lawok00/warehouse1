@@ -42,8 +42,6 @@ public class ClientController {
         }
     }
 
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable int id){
         if(clientService.getClientById(id).isEmpty()){
@@ -54,18 +52,15 @@ public class ClientController {
         }
     }
 
-//    @PatchMapping("/{id}")
-//    public ResponseEntity<Client> updateClient(@PathVariable int id){
-//        Client updateClient
-//        if(clientService.getClientById(id).isEmpty()){
-//            return ResponseEntity.notFound().build();
-//            }else{
-//            clientService.updateById(id);
-//            return ResponseEntity
-//                    .status(HttpStatus.CREATED)
-//                    .body(sav);
-//        }
-//    }
+    @PutMapping("/fullUpdate/{id}")
+    public ResponseEntity<String> fullUpdateClient(@PathVariable Integer id, @RequestBody Client updateClient){
+    Optional<Client> clientBeUpdated = clientService.fulClientUpdate(id, updateClient);
+    if(clientBeUpdated.isPresent()){
+        return ResponseEntity.ok("Client updated.");
+    }else{
+        return ResponseEntity.notFound().build();
+    }
+    }
 
 
 }

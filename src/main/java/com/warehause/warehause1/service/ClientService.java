@@ -30,8 +30,14 @@ public class ClientService{
     public void removeById(int id){
         repository.deleteById(id);
     }
-//    public Client updateById(int id){
-//        return repository.s;
-//    }
+
+    public Optional<Client> fulClientUpdate(Integer clientId, Client updateClient){
+        if(repository.existsById(clientId)){
+            updateClient.setClientId(clientId);
+            return Optional.of(repository.save(updateClient));
+            }else{
+            return Optional.empty();
+        }
+    }
 
 }

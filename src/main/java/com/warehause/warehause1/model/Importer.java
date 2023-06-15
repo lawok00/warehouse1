@@ -1,11 +1,14 @@
 package com.warehause.warehause1.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Table
 @Entity
@@ -13,10 +16,23 @@ public class Importer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "impotrer_id")
-private Integer importerId;
+    private Integer importerId;
 
     private String importerName;
-private String importerProducent;
+    private String importerProducent;
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    @OneToOne(mappedBy = "importer")
+    @JsonIgnore
+    private Seller seller;
+
 
     public Importer(Integer importerId, String importerName, String importerProducent) {
         this.importerId = importerId;
