@@ -11,6 +11,7 @@ import java.util.Optional;
 public class SellerService {
     private final SellerJpaRepository sellerJpaRepository;
 
+
     public SellerService(SellerJpaRepository sellerJpaRepository) {
         this.sellerJpaRepository = sellerJpaRepository;
     }

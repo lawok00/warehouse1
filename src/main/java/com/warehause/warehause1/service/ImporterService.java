@@ -1,8 +1,9 @@
 package com.warehause.warehause1.service;
 
-import com.warehause.warehause1.model.Device;
 import com.warehause.warehause1.model.Importer;
+import com.warehause.warehause1.model.Seller;
 import com.warehause.warehause1.repository.ImporterJpaRepository;
+import com.warehause.warehause1.repository.SellerJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -10,9 +11,11 @@ import java.util.Optional;
 @Service
 public class ImporterService {
     private final ImporterJpaRepository importerJpaRepository;
+    private final SellerJpaRepository sellerJpaRepository;
 
-    public ImporterService(ImporterJpaRepository importerJpaRepository) {
+    public ImporterService(ImporterJpaRepository importerJpaRepository, SellerJpaRepository sellerJpaRepository) {
         this.importerJpaRepository = importerJpaRepository;
+        this.sellerJpaRepository = sellerJpaRepository;
     }
     public Iterable<Importer> getAllImporters(){
         return importerJpaRepository.findAll();
@@ -39,5 +42,14 @@ public class ImporterService {
         }else{
             return Optional.empty();
         }
+    }
+    public Optional<Importer> setSellerForImporter(Integer sellerId, Integer importerId) {
+        if(importerJpaRepository.existsById(importerId) && sellerJpaRepository.existsById(sellerId)) {
+            Importer importer = importerJpaRepository.findById(importerId).get();
+            Seller seller = sellerJpaRepository.findById(sellerId).get();
+            importer.setSeller(seller);
+            return Optional.of(importerJpaRepository.save(importer));
+        }
+        return Optional.empty();
     }
 }

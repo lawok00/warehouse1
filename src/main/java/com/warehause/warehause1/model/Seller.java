@@ -26,7 +26,7 @@ public class Seller {
         this.importer = importer;
     }
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "i_id")
     private Importer importer;
 

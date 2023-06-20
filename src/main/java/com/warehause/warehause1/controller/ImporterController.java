@@ -58,4 +58,14 @@ public class ImporterController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PatchMapping("/sellerForImporter/{importerId}/setSeller/{sellerId}")
+    public ResponseEntity<String> setSellerForImporter(@PathVariable Integer importerId, @PathVariable Integer sellerId) { //zmienna ze ścieżki, linijka 70
+        Optional<Importer> sellerForImporter = importerService.setSellerForImporter(sellerId, importerId);
+        if(sellerForImporter.isPresent()) {
+            return ResponseEntity.ok("Seller set for importer succesfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }
