@@ -68,4 +68,6 @@ public class ImporterController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("{importerName}")
+    // TODO: 20.06.2023  
 }

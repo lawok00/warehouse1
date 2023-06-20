@@ -31,10 +31,17 @@ public class ImporterService {
             return Optional.of(importerJpaRepository.save(importer));
         }
     }
-    public void removeById(int id){
-        importerJpaRepository.deleteById(id);
+    public void removeById(int id) {
+        Optional<Importer> optionalImporter = importerJpaRepository.findById(id);
+        if (optionalImporter.isPresent()) {
+            Seller seller = optionalImporter.get().getSeller();
+            if (seller != null){
+                seller.setImporter(null);
+                sellerJpaRepository.save(seller);
+            }
+            importerJpaRepository.deleteById(id);
+        }
     }
-
     public Optional<Importer> fulImporterUpdate(Integer importerId, Importer updateImporter){
         if(importerJpaRepository.existsById(importerId)){
             updateImporter.setImporterId(importerId);
@@ -47,9 +54,13 @@ public class ImporterService {
         if(importerJpaRepository.existsById(importerId) && sellerJpaRepository.existsById(sellerId)) {
             Importer importer = importerJpaRepository.findById(importerId).get();
             Seller seller = sellerJpaRepository.findById(sellerId).get();
-            importer.setSeller(seller);
+            seller.setImporter(importer);
             return Optional.of(importerJpaRepository.save(importer));
         }
         return Optional.empty();
+    }
+    public Optional<Importer> findByImporterName(String importerName){
+        // TODO: 20.06.2023
+        return null;
     }
 }
