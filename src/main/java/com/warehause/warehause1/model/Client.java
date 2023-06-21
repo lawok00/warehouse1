@@ -15,6 +15,18 @@ public class Client {
     private String clientName;
     private Integer clientNote;
 
+    @ManyToOne
+    @JoinColumn(name = "sellerId")
+    private Seller seller;
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
     public Client(Integer clientId, String clientName, Integer clientNote) {
         this.clientId = clientId;
         this.clientName = clientName;

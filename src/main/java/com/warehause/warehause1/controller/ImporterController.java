@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -68,6 +69,8 @@ public class ImporterController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("{importerName}")
-    // TODO: 20.06.2023  
+    @GetMapping("/getImporterByName/{importerName}")
+    public List <Importer> findImporterByName(@PathVariable String importerName){
+        return importerService.findByImporterName(importerName);
+    }
 }

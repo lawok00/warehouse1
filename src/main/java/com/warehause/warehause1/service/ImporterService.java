@@ -6,6 +6,7 @@ import com.warehause.warehause1.repository.ImporterJpaRepository;
 import com.warehause.warehause1.repository.SellerJpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -59,8 +60,7 @@ public class ImporterService {
         }
         return Optional.empty();
     }
-    public Optional<Importer> findByImporterName(String importerName){
-        // TODO: 20.06.2023
-        return null;
+    public List<Importer> findByImporterName(String importerName){
+          return importerJpaRepository.findByImporterNameContaining(importerName);
     }
 }

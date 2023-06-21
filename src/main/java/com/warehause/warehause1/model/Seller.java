@@ -1,8 +1,10 @@
 package com.warehause.warehause1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,13 +32,18 @@ public class Seller {
     @JoinColumn(name = "i_id")
     private Importer importer;
 
+    @OneToMany(mappedBy = "sellerId")
+    @JsonIgnore
+    private List<Client> clients;
 
-    public Seller(Integer sellerId, String sellerName, String sellerLevel, Integer sellerAge) {
-        this.sellerId = sellerId;
-        this.sellerName = sellerName;
-        this.sellerLevel = sellerLevel;
-        this.sellerAge = sellerAge;
+    public List<Client> getClients() {
+        return clients;
     }
+
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
+    }
+
 
     public Seller() {
     }
