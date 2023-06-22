@@ -32,8 +32,8 @@ public class Seller {
     @JoinColumn(name = "i_id")
     private Importer importer;
 
-    @OneToMany(mappedBy = "sellerId")
-    @JsonIgnore
+    @OneToMany(mappedBy = "seller")
+
     private List<Client> clients;
 
     public List<Client> getClients() {

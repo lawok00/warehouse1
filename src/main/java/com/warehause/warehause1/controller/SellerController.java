@@ -58,4 +58,13 @@ public class SellerController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PatchMapping("/clientForSeller/{sellerId}/setClient/{clientId}")
+    public ResponseEntity<String> setClientForSeller(@PathVariable Integer sellerId, @PathVariable Integer clientId) { //zmienna ze ścieżki, linijka 70
+        Optional<Seller> clientForSeller = sellerService.setSellerForClient(clientId, sellerId);
+        if(clientForSeller.isPresent()) {
+            return ResponseEntity.ok("Client set for seller succesfully");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

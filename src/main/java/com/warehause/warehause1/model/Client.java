@@ -1,5 +1,6 @@
 package com.warehause.warehause1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Objects;
@@ -16,7 +17,8 @@ public class Client {
     private Integer clientNote;
 
     @ManyToOne
-    @JoinColumn(name = "sellerId")
+    @JsonIgnore
+    @JoinColumn(name = "s_id")
     private Seller seller;
 
     public Seller getSeller() {

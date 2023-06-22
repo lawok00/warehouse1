@@ -47,7 +47,7 @@ public class ClientController {
         if(clientService.getClientById(id).isEmpty()){
             return ResponseEntity.notFound().build();
         }else{
-            clientService.removeById(id);
+            clientService.deleteClientById(id);
             return ResponseEntity.noContent().build();
         }
     }
