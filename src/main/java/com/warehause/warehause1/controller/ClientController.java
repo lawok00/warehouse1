@@ -1,7 +1,9 @@
 package com.warehause.warehause1.controller;
 
 import com.warehause.warehause1.model.Client;
+import com.warehause.warehause1.model.Device;
 import com.warehause.warehause1.service.ClientService;
+import com.warehause.warehause1.service.DeviceService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,26 +15,35 @@ import java.util.Optional;
 public class ClientController {
 
     private ClientService clientService;
+    private DeviceService deviceService;
 
-    public ClientController(ClientService clientService) {
+    public DeviceService getDeviceService() {
+        return deviceService;
+    }
+
+    public void setDeviceService(DeviceService deviceService) {
+        this.deviceService = deviceService;
+    }
+
+    public ClientController(ClientService clientService, DeviceService deviceService) {
         this.clientService = clientService;
+        this.deviceService = deviceService;
     }
 
     @GetMapping
-    public Iterable<Client> getAllClients(){
+    public Iterable<Client> getAllClients() {
         return clientService.getAllClients();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Client> getClientById(@PathVariable int id){
-        Optional<Client> response = clientService.getClientById(id);
-        return response.
-                map(clientResponse -> ResponseEntity.ok(clientResponse))
-                .orElseGet(() ->ResponseEntity.notFound().build())                ;
+    public ResponseEntity<Client> getClientById(@PathVariable int id) {
+        Client response = clientService.getClientById(id);
+        return ResponseEntity.ok(response);
     }
+
     @PostMapping
     public ResponseEntity<Client> postClient(@RequestBody Client requestClient) {
-        Optional <Client> savedClient = clientService.saveNew(requestClient);
+        Optional<Client> savedClient = clientService.saveNew(requestClient);
         if (savedClient.isPresent()) {
             return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -43,23 +54,36 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClient(@PathVariable int id){
-        if(clientService.getClientById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-        }else{
+    public ResponseEntity<Void> deleteClient(@PathVariable int id) {
+
             clientService.deleteClientById(id);
             return ResponseEntity.noContent().build();
-        }
+
     }
 
     @PutMapping("/fullUpdate/{id}")
-    public ResponseEntity<String> fullUpdateClient(@PathVariable Integer id, @RequestBody Client updateClient){
-    Optional<Client> clientBeUpdated = clientService.fulClientUpdate(id, updateClient);
-    if(clientBeUpdated.isPresent()){
-        return ResponseEntity.ok("Client updated.");
-    }else{
-        return ResponseEntity.notFound().build();
+    public ResponseEntity<String> fullUpdateClient(@PathVariable Integer id, @RequestBody Client updateClient) {
+        Optional<Client> clientBeUpdated = clientService.fulClientUpdate(id, updateClient);
+        if (clientBeUpdated.isPresent()) {
+            return ResponseEntity.ok("Client updated.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
+
+
+
+    @PatchMapping("{id}/addDeviceToClient/{deviceId}")
+    public ResponseEntity<Void> addDeviceToClient(@PathVariable int id, @PathVariable int deviceId){
+        Optional<Device> optionalDevice = deviceService.getDeviceById(deviceId);
+        Client client = clientService.getClientById(id);
+        if(optionalDevice.isEmpty() ){
+            return ResponseEntity.notFound().build();
+            }
+        Device device = optionalDevice.get();
+
+        clientService.addDeviceToClient(client, device);
+        return ResponseEntity.noContent().build();
     }
 
 

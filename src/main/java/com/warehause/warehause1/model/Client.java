@@ -3,6 +3,7 @@ package com.warehause.warehause1.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -21,6 +22,13 @@ public class Client {
     @JoinColumn(name = "s_id")
     private Seller seller;
 
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(name = "client_device",
+    joinColumns = @JoinColumn(name = "client_id"),
+    inverseJoinColumns = @JoinColumn(name = "device_id"))
+    private List <Device> deviceList;
+
     public Seller getSeller() {
         return seller;
     }
@@ -36,6 +44,14 @@ public class Client {
     }
 
     public Client() {
+    }
+
+    public void setDeviceList(List<Device> deviceList) {
+        this.deviceList = deviceList;
+    }
+
+    public List<Device> getDeviceList(){
+        return deviceList;
     }
 
     public String getClientName() {

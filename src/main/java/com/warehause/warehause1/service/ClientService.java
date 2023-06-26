@@ -1,11 +1,14 @@
 package com.warehause.warehause1.service;
 
+import com.warehause.warehause1.exceptionHandler.NotFoundException;
 import com.warehause.warehause1.model.Client;
+import com.warehause.warehause1.model.Device;
 import com.warehause.warehause1.model.Seller;
 import com.warehause.warehause1.repository.ClientJpaRepository;
 import com.warehause.warehause1.repository.SellerJpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,8 +24,12 @@ public class ClientService{
     public Iterable<Client> getAllClients(){
         return clientJpaRepository.findAll();
     }
-    public Optional<Client> getClientById(int id){
-        return clientJpaRepository.findById(id);
+    public Client getClientById(int id){
+        Optional<Client> optionalClient = clientJpaRepository.findById(id);
+        if (optionalClient.isEmpty()){
+            throw new NotFoundException("Nie ma takiego klienta");
+        }
+        return optionalClient.get();
     }
     public Optional <Client> saveNew(Client client) {
         if (client.getClientId() != null && clientJpaRepository.existsById(client.getClientId())) {
@@ -32,20 +39,16 @@ public class ClientService{
         }
     }
     public void deleteClientById(int clientId) {
+
         Optional<Client> clientToDelete = clientJpaRepository.findById(clientId);
         if(clientToDelete.isPresent()) {
-            Seller seller = clientToDelete.get().getSeller();
-            if(seller != null) {
-                seller.setClients(null); //utrata powiązania
-                sellerJpaRepository.save(seller);
-            }
-            clientJpaRepository.deleteById(clientId);
+           clientJpaRepository.deleteById(clientId);
+      }else{
+            throw new NotFoundException("Nie ma takiego klienta");
         }
     }
 
-//    public void removeById(int id){
-//        repository.deleteById(id);
-//    }
+
 
     public Optional<Client> fulClientUpdate(Integer clientId, Client updateClient){
         if(clientJpaRepository.existsById(clientId)){
@@ -54,6 +57,12 @@ public class ClientService{
             }else{
             return Optional.empty();
         }
+    }
+    public void addDeviceToClient(Client client, Device device){
+        List<Device> deviceList = client.getDeviceList();
+        deviceList.add(device);
+        client.setDeviceList(deviceList);
+        clientJpaRepository.save(client);
     }
 
 }

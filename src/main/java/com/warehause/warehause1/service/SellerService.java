@@ -34,7 +34,15 @@ public class SellerService {
         }
     }
     public void removeById(int id){
-        sellerJpaRepository.deleteById(id);
+
+        Optional<Seller> delSeller = sellerJpaRepository.findById(id);
+        if (delSeller.isPresent()) {
+            for (Client client : delSeller.get().getClients()) {
+                client.setSeller(null);
+                clientJpaRepository.save(client);
+            }
+            sellerJpaRepository.deleteById(id);
+        }
     }
 
     public Optional<Seller> fulSellerUpdate(Integer sellerId, Seller updateSeller){

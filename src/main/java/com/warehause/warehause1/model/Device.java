@@ -2,6 +2,7 @@ package com.warehause.warehause1.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -23,6 +24,19 @@ public class Device {
     }
 
     public Device() {
+    }
+    @ManyToMany
+    @JoinTable(name = "client_device",
+            joinColumns = @JoinColumn(name = "device_id"),
+            inverseJoinColumns = @JoinColumn(name = "client_id"))
+    private List<Client> clientList;
+
+    public List<Client> getClientList() {
+        return clientList;
+    }
+
+    public void setClientList(List<Client> clientList) {
+        this.clientList = clientList;
     }
 
     public Integer getDeviceId() {
