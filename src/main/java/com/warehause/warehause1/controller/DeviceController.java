@@ -24,10 +24,8 @@ public class DeviceController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Device> getDeviceById(@PathVariable int id){
-        Optional<Device> response = deviceService.getDeviceById(id);
-        return response.
-                map(deviceResponse -> ResponseEntity.ok(deviceResponse))
-                .orElseGet(() ->ResponseEntity.notFound().build())                ;
+        Device response = deviceService.getDeviceById(id);
+        return ResponseEntity.ok(response);
     }
     @PostMapping
     public ResponseEntity<Device> postDevice(@RequestBody Device requestDevice) {
@@ -42,12 +40,8 @@ public class DeviceController {
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDevice(@PathVariable int id){
-        if(deviceService.getDeviceById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-        }else{
-            deviceService.removeById(id);
-            return ResponseEntity.noContent().build();
-        }
+        deviceService.removeById(id);
+        return ResponseEntity.noContent().build();
     }
     @PutMapping("/fullUpdate/{id}")
     public ResponseEntity<String> fullUpdateDevice(@PathVariable Integer id, @RequestBody  Device updateDevice){

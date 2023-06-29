@@ -1,5 +1,6 @@
 package com.warehause.warehause1.service;
 
+import com.warehause.warehause1.exceptionHandler.NotFoundException;
 import com.warehause.warehause1.model.Client;
 import com.warehause.warehause1.model.Device;
 import com.warehause.warehause1.repository.DeviceJpaRepository;
@@ -17,8 +18,12 @@ public class DeviceService {
     public Iterable<Device> getAllDevices(){
         return deviceRepository.findAll();
     }
-    public Optional<Device> getDeviceById(int id){
-        return deviceRepository.findById(id);
+    public Device getDeviceById(int id){
+        Optional<Device> optionalDevice = deviceRepository.findById(id);
+        if (optionalDevice.isEmpty()) {
+            throw new NotFoundException("Nie ma takiego urządzenia");
+        }
+        return optionalDevice.get();
     }
 
     public Optional <Device> saveNew(Device device) {

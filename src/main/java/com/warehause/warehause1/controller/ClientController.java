@@ -43,46 +43,26 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<Client> postClient(@RequestBody Client requestClient) {
-        Optional<Client> savedClient = clientService.saveNew(requestClient);
-        if (savedClient.isPresent()) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(savedClient.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        Client savedClient = clientService.saveNew(requestClient);
+            return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable int id) {
-
             clientService.deleteClientById(id);
             return ResponseEntity.noContent().build();
-
     }
 
     @PutMapping("/fullUpdate/{id}")
     public ResponseEntity<String> fullUpdateClient(@PathVariable Integer id, @RequestBody Client updateClient) {
-        Optional<Client> clientBeUpdated = clientService.fulClientUpdate(id, updateClient);
-        if (clientBeUpdated.isPresent()) {
-            return ResponseEntity.ok("Client updated.");
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        Client clientBeUpdated = clientService.fullClientUpdate(id, updateClient);
+            return ResponseEntity.status(HttpStatus.UPGRADE_REQUIRED).build();
     }
-
-
 
     @PatchMapping("{id}/addDeviceToClient/{deviceId}")
     public ResponseEntity<Void> addDeviceToClient(@PathVariable int id, @PathVariable int deviceId){
-        Optional<Device> optionalDevice = deviceService.getDeviceById(deviceId);
-        Client client = clientService.getClientById(id);
-        if(optionalDevice.isEmpty() ){
-            return ResponseEntity.notFound().build();
-            }
-        Device device = optionalDevice.get();
 
-        clientService.addDeviceToClient(client, device);
+        clientService.addDeviceToClient(id, deviceId);
         return ResponseEntity.noContent().build();
     }
 
