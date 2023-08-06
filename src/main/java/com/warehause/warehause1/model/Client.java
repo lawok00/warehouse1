@@ -29,14 +29,6 @@ public class Client {
     inverseJoinColumns = @JoinColumn(name = "device_id"))
     private List <Device> deviceList;
 
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
     public Client(Integer clientId, String clientName, Integer clientNote) {
         this.clientId = clientId;
         this.clientName = clientName;
@@ -44,6 +36,13 @@ public class Client {
     }
 
     public Client() {
+    }
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
     public void setDeviceList(List<Device> deviceList) {

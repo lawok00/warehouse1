@@ -1,6 +1,5 @@
 package com.warehause.warehause1.controller;
 
-import com.warehause.warehause1.model.Device;
 import com.warehause.warehause1.model.Importer;
 import com.warehause.warehause1.service.ImporterService;
 import org.springframework.http.HttpStatus;
@@ -52,7 +51,7 @@ public class ImporterController {
     }
     @PutMapping("/fullUpdate/{id}")
     public ResponseEntity<String> fullUpdateImporter(@PathVariable Integer id, @RequestBody  Importer updateImporter){
-        Optional<Importer> importerBeUpdated = importerService.fulImporterUpdate(id, updateImporter);
+        Optional<Importer> importerBeUpdated = importerService.fullImporterUpdate(id, updateImporter);
         if(importerBeUpdated.isPresent()){
             return ResponseEntity.ok("Client updated.");
         }else{

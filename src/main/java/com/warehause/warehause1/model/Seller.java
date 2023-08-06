@@ -20,13 +20,6 @@ public class Seller {
     private String sellerLevel;
     private Integer sellerAge;
 
-    public Importer getImporter() {
-        return importer;
-    }
-
-    public void setImporter(Importer importer) {
-        this.importer = importer;
-    }
 
     @OneToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "i_id")
@@ -35,6 +28,15 @@ public class Seller {
     @OneToMany(mappedBy = "seller")
 
     private List<Client> clients;
+    public Seller() {
+    }
+    public Importer getImporter() {
+        return importer;
+    }
+
+    public void setImporter(Importer importer) {
+        this.importer = importer;
+    }
 
     public List<Client> getClients() {
         return clients;
@@ -42,10 +44,6 @@ public class Seller {
 
     public void setClients(List<Client> clients) {
         this.clients = clients;
-    }
-
-
-    public Seller() {
     }
 
     public Integer getSellerId() {

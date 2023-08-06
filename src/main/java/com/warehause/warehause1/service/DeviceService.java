@@ -1,7 +1,6 @@
 package com.warehause.warehause1.service;
 
 import com.warehause.warehause1.exceptionHandler.NotFoundException;
-import com.warehause.warehause1.model.Client;
 import com.warehause.warehause1.model.Device;
 import com.warehause.warehause1.repository.DeviceJpaRepository;
 import org.springframework.stereotype.Service;
@@ -10,39 +9,44 @@ import java.util.Optional;
 
 @Service
 public class DeviceService {
-    private final DeviceJpaRepository deviceRepository;
+    private final DeviceJpaRepository deviceJpaRepository;
 
     public DeviceService(DeviceJpaRepository deviceRepository) {
-        this.deviceRepository = deviceRepository;
+        this.deviceJpaRepository = deviceRepository;
     }
     public Iterable<Device> getAllDevices(){
-        return deviceRepository.findAll();
+        return deviceJpaRepository.findAll();
     }
     public Device getDeviceById(int id){
-        Optional<Device> optionalDevice = deviceRepository.findById(id);
+        Optional<Device> optionalDevice = deviceJpaRepository.findById(id);
         if (optionalDevice.isEmpty()) {
             throw new NotFoundException("Nie ma takiego urządzenia");
         }
         return optionalDevice.get();
     }
 
-    public Optional <Device> saveNew(Device device) {
-        if (device.getDeviceId() != null && deviceRepository.existsById(device.getDeviceId())) {
-            return Optional.empty();
+    public Device saveNew(Device device) {
+        if (device.getDeviceId() != null && deviceJpaRepository.existsById(device.getDeviceId())) {
+            throw new NotFoundException("Urządzenie o podanym ID już istnieje");
         } else {
-            return Optional.of(deviceRepository.save(device));
+            return deviceJpaRepository.save(device);
         }
     }
-    public void removeById(int id){
-        deviceRepository.deleteById(id);
+    public void deleteDeviceById(int deviceId){
+        Optional<Device> deviceToDelete = deviceJpaRepository.findById(deviceId);
+        if (deviceToDelete.isPresent()) {
+            deviceJpaRepository.deleteById(deviceId);
+        } else {
+            throw new NotFoundException("Nie ma takiego urządzenia");
+        }
     }
 
-    public Optional<Device> fulDeviceUpdate(Integer deviceId, Device updateDevice){
-        if(deviceRepository.existsById(deviceId)){
+    public Device fullDeviceUpdate(Integer deviceId, Device updateDevice){
+        if (deviceJpaRepository.existsById(deviceId)) {
             updateDevice.setDeviceId(deviceId);
-            return Optional.of(deviceRepository.save(updateDevice));
-        }else{
-            return Optional.empty();
+            return deviceJpaRepository.save(updateDevice);
+        } else {
+            throw new NotFoundException("Nie ma takiego urządzenia");
         }
     }
 }

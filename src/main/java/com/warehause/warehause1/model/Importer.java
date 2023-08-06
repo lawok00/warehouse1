@@ -17,17 +17,8 @@ public class Importer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "impotrer_id")
     private Integer importerId;
-
     private String importerName;
     private String importerProducent;
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
 
     @OneToOne(mappedBy = "importer")
     @JsonIgnore
@@ -41,6 +32,13 @@ public class Importer {
     }
 
     public Importer() {
+    }
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
     }
 
     public Integer getImporterId() {

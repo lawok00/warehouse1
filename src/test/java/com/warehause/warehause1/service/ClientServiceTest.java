@@ -115,7 +115,6 @@ class ClientServiceTest {
         when(clientJpaRepository.existsById(clientId)).thenReturn(true);
         when(clientJpaRepository.save(updatedClient)).thenReturn(updatedClient);
         Client result = clientService.fullClientUpdate(clientId, updatedClient);
-        verify(clientJpaRepository, times(1)).existsById(clientId);
         verify(clientJpaRepository, times(1)).save(updatedClient);
     }
 

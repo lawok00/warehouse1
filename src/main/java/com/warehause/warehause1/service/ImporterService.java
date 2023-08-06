@@ -43,7 +43,7 @@ public class ImporterService {
             importerJpaRepository.deleteById(id);
         }
     }
-    public Optional<Importer> fulImporterUpdate(Integer importerId, Importer updateImporter){
+    public Optional<Importer> fullImporterUpdate(Integer importerId, Importer updateImporter){
         if(importerJpaRepository.existsById(importerId)){
             updateImporter.setImporterId(importerId);
             return Optional.of(importerJpaRepository.save(updateImporter));

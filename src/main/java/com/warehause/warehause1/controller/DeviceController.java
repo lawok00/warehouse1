@@ -29,27 +29,17 @@ public class DeviceController {
     }
     @PostMapping
     public ResponseEntity<Device> postDevice(@RequestBody Device requestDevice) {
-        Optional <Device> savedDevice = deviceService.saveNew(requestDevice);
-        if (savedDevice.isPresent()) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(savedDevice.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        Device savedDevice = deviceService.saveNew(requestDevice);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDevice(@PathVariable int id){
-        deviceService.removeById(id);
+        deviceService.deleteDeviceById(id);
         return ResponseEntity.noContent().build();
     }
     @PutMapping("/fullUpdate/{id}")
     public ResponseEntity<String> fullUpdateDevice(@PathVariable Integer id, @RequestBody  Device updateDevice){
-        Optional<Device> deviceBeUpdated = deviceService.fulDeviceUpdate(id, updateDevice);
-        if(deviceBeUpdated.isPresent()){
-            return ResponseEntity.ok("Client updated.");
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+        Device deviceBeUpdated = deviceService.fullDeviceUpdate(id, updateDevice);
+        return ResponseEntity.status(HttpStatus.UPGRADE_REQUIRED).build();
     }
 }
