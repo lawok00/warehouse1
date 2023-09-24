@@ -27,7 +27,7 @@ public class DeviceService {
 
     public Device saveNew(Device device) {
         if (device.getDeviceId() != null && deviceJpaRepository.existsById(device.getDeviceId())) {
-            throw new NotFoundException("Urządzenie o podanym ID już istnieje");
+            throw new NotFoundException("Urządzenie o podanym Id już istnieje");
         } else {
             return deviceJpaRepository.save(device);
         }
