@@ -1,5 +1,6 @@
 package com.warehause.warehause1.service;
 
+import com.warehause.warehause1.exceptionHandler.NotFoundException;
 import com.warehause.warehause1.model.Importer;
 import com.warehause.warehause1.model.Seller;
 import com.warehause.warehause1.repository.ImporterJpaRepository;
@@ -18,37 +19,44 @@ public class ImporterService {
         this.importerJpaRepository = importerJpaRepository;
         this.sellerJpaRepository = sellerJpaRepository;
     }
-    public Iterable<Importer> getAllImporters(){
+
+    public Importer getImporterById(int id){
+        Optional<Importer> optionalImporter = importerJpaRepository.findById(id);
+        if (optionalImporter.isEmpty()) {
+            throw new NotFoundException("Nie ma takiego importera");
+        }
+        return optionalImporter.get();
+    }
+    public Iterable<Importer> getAllImporters() {
         return importerJpaRepository.findAll();
     }
-    public Optional<Importer> getImporterById(int id){
-        return importerJpaRepository.findById(id);
-    }
 
-    public Optional <Importer> saveNew(Importer importer) {
+    public Importer saveNew(Importer importer) {
         if (importer.getImporterId() != null && importerJpaRepository.existsById(importer.getImporterId())) {
-            return Optional.empty();
+            throw new NotFoundException("Importer o podanym Id już istnieje");
         } else {
-            return Optional.of(importerJpaRepository.save(importer));
+            return importerJpaRepository.save(importer);
         }
     }
-    public void removeById(int id) {
-        Optional<Importer> optionalImporter = importerJpaRepository.findById(id);
-        if (optionalImporter.isPresent()) {
-            Seller seller = optionalImporter.get().getSeller();
+    public void deleteImporterById(int importerId) {
+        Optional<Importer> importerToDelete = importerJpaRepository.findById(importerId);
+        if (importerToDelete.isPresent()) {
+            Seller seller = importerToDelete.get().getSeller();
             if (seller != null){
                 seller.setImporter(null);
                 sellerJpaRepository.save(seller);
             }
-            importerJpaRepository.deleteById(id);
+            importerJpaRepository.deleteById(importerId);
+        }else{
+            throw new NotFoundException("Nie ma takiego importera");
         }
     }
-    public Optional<Importer> fullImporterUpdate(Integer importerId, Importer updateImporter){
-        if(importerJpaRepository.existsById(importerId)){
+    public Importer fullImporterUpdate(Integer importerId, Importer updateImporter){
+        if (importerJpaRepository.existsById(importerId)) {
             updateImporter.setImporterId(importerId);
-            return Optional.of(importerJpaRepository.save(updateImporter));
-        }else{
-            return Optional.empty();
+            return importerJpaRepository.save(updateImporter);
+        } else {
+            throw new NotFoundException("Nie ma takiego importera");
         }
     }
     public Optional<Importer> setSellerForImporter(Integer sellerId, Integer importerId) {

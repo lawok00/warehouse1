@@ -1,7 +1,7 @@
 package com.warehause.warehause1.service;
 
+import com.warehause.warehause1.exceptionHandler.NotFoundException;
 import com.warehause.warehause1.model.Client;
-import com.warehause.warehause1.model.Importer;
 import com.warehause.warehause1.model.Seller;
 import com.warehause.warehause1.repository.ClientJpaRepository;
 import com.warehause.warehause1.repository.SellerJpaRepository;
@@ -13,31 +13,39 @@ import java.util.Optional;
 public class SellerService {
     private final SellerJpaRepository sellerJpaRepository;
     private final ClientJpaRepository clientJpaRepository;
+    private final Client client;
 
 
-    public SellerService(SellerJpaRepository sellerJpaRepository, ClientJpaRepository clientJpaRepository) {
+    public SellerService(SellerJpaRepository sellerJpaRepository, ClientJpaRepository clientJpaRepository, Client client) {
         this.sellerJpaRepository = sellerJpaRepository;
         this.clientJpaRepository = clientJpaRepository;
+        this.client = client;
+    }
+    
+    public Seller getSellerById(int id) {
+        Optional<Seller> optionalSeller = sellerJpaRepository.findById(id);
+        if (optionalSeller.isEmpty()) {
+            throw new NotFoundException("Nie ma takiego sprzedawcy");
+        }
+        return optionalSeller.get();
     }
     public Iterable<Seller> getAllSellers(){
         return sellerJpaRepository.findAll();
     }
-    public Optional<Seller> getSellerById(int id){
-        return sellerJpaRepository.findById(id);
-    }
 
-    public Optional <Seller> saveNew(Seller seller) {
+    public Seller saveNew(Seller seller) {
         if (seller.getSellerId() != null && sellerJpaRepository.existsById(seller.getSellerId())) {
-            return Optional.empty();
+            throw new NotFoundException("Sprzedawca o podanym Id już istnieje");
         } else {
-            return Optional.of(sellerJpaRepository.save(seller));
+            return sellerJpaRepository.save(seller);
         }
     }
-    public void removeById(int id){
 
-        Optional<Seller> delSeller = sellerJpaRepository.findById(id);
-        if (delSeller.isPresent()) {
-            for (Client client : delSeller.get().getClients()) {
+    // TODO: 26.09.2023 change rest of class 
+    public void deleteSellerById(int id){
+        Optional<Seller> sellerToDelete = sellerJpaRepository.findById(id);
+        if (sellerToDelete.isPresent()) {            
+            for (Client client : sellerToDelete.get().getClients()) {
                 client.setSeller(null);
                 clientJpaRepository.save(client);
             }

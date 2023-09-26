@@ -65,8 +65,6 @@ public class ClientService {
     public void addDeviceToClient(Integer clientId, Integer deviceId) {
         Client client = getClientById(clientId);
         Device device1 = deviceService.getDeviceById(deviceId);
-
-
         List<Device> deviceList = client.getDeviceList();
         deviceList.add(device1);
         client.setDeviceList(deviceList);

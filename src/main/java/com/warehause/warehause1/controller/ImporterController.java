@@ -24,39 +24,23 @@ public class ImporterController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Importer> getImporterId(@PathVariable int id){
-        Optional<Importer> response = importerService.getImporterById(id);
-        return response.
-                map(importerResponse -> ResponseEntity.ok(importerResponse))
-                .orElseGet(() ->ResponseEntity.notFound().build())                ;
+        Importer response = importerService.getImporterById(id);
+        return ResponseEntity.ok(response);
     }
     @PostMapping
     public ResponseEntity<Importer> postImporter(@RequestBody Importer requestImporter) {
-        Optional <Importer> savedImporter = importerService.saveNew(requestImporter);
-        if (savedImporter.isPresent()) {
-            return ResponseEntity
-                    .status(HttpStatus.CREATED)
-                    .body(savedImporter.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-        }
+        Importer saveImporter = importerService.saveNew(requestImporter);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteImporter(@PathVariable int id){
-        if(importerService.getImporterById(id).isEmpty()){
-            return ResponseEntity.notFound().build();
-        }else{
-            importerService.removeById(id);
-            return ResponseEntity.noContent().build();
-        }
+       importerService.deleteImporterById(id);
+       return ResponseEntity.noContent().build();
     }
     @PutMapping("/fullUpdate/{id}")
     public ResponseEntity<String> fullUpdateImporter(@PathVariable Integer id, @RequestBody  Importer updateImporter){
-        Optional<Importer> importerBeUpdated = importerService.fullImporterUpdate(id, updateImporter);
-        if(importerBeUpdated.isPresent()){
-            return ResponseEntity.ok("Client updated.");
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+       Importer importerBeUpdated = importerService.fullImporterUpdate(id, updateImporter);
+       return ResponseEntity.status(HttpStatus.UPGRADE_REQUIRED).build();
     }
 
     @PatchMapping("/sellerForImporter/{importerId}/setSeller/{sellerId}")
