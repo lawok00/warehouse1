@@ -1,5 +1,6 @@
 package com.warehause.warehause1.controller;
 
+import com.warehause.warehause1.model.Importer;
 import com.warehause.warehause1.model.Seller;
 import com.warehause.warehause1.service.SellerService;
 import org.springframework.http.HttpStatus;
@@ -38,12 +39,8 @@ public class SellerController {
     }
     @PutMapping("/fullUpdate/{id}")
     public ResponseEntity<String> fullUpdateSeller(@PathVariable Integer id, @RequestBody  Seller updateSeller){
-        Optional<Seller> sellerBeUpdated = sellerService.fulSellerUpdate(id, updateSeller);
-        if(sellerBeUpdated.isPresent()){
-            return ResponseEntity.ok("Client updated.");
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+        Seller sellerBeUpdated = sellerService.fullSellerUpdate(id, updateSeller);
+        return ResponseEntity.status(HttpStatus.UPGRADE_REQUIRED).build();
     }
     @PatchMapping("/clientForSeller/{sellerId}/setClient/{clientId}")
     public ResponseEntity<String> setClientForSeller(@PathVariable Integer sellerId, @PathVariable Integer clientId) { //zmienna ze ścieżki, linijka 70

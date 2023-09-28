@@ -42,7 +42,7 @@ class DeviceServiceTest {
     @Test
     void getDeviceByIdShouldReturnDeviceById () {
         Device device = new Device(1, "AAB", 3.5f, "Router");
-        Mockito.when(deviceJpaRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(device));
+        when(deviceJpaRepository.findById(anyInt())).thenReturn(Optional.of(device));
         Optional<Device> retrievedDevice = Optional.ofNullable(deviceService.getDeviceById(1));
         Assertions.assertTrue(retrievedDevice.isPresent());
         assertEquals(device, retrievedDevice.get());
@@ -60,12 +60,12 @@ class DeviceServiceTest {
     @Test
     void saveNewShouldAddAndReturnNewDevice() {
         Device device = new Device(1, "AAB", 3.5f, "Router");
-        Mockito.when(deviceJpaRepository.save(device)).thenReturn(device);
+        when(deviceJpaRepository.save(device)).thenReturn(device);
         Device saveDevice = this.deviceService.saveNew(device);
         assertEquals(saveDevice, device);
     }
     @Test
-    void saveNewShouldNotSaveExistingDeviceClient() {
+    void saveNewShouldNotSaveExistingDevice() {
         NotFoundException thrown = Assertions.assertThrows(NotFoundException.class, () -> {
             Device device = new Device(1, "AAB", 3.5f, "Router");
             when(deviceJpaRepository.existsById(device.getDeviceId())).thenReturn(true);
@@ -77,7 +77,7 @@ class DeviceServiceTest {
     void deleteDeviceByIdShouldDeleteDevice() {
         Integer deviceId = 1;
         Device device = new Device(deviceId, "AAB", 3.5f, "Router");
-        Mockito.when(deviceJpaRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(device));
+        when(deviceJpaRepository.findById(anyInt())).thenReturn(Optional.of(device));
         deviceService.deleteDeviceById(deviceId);
         verify(deviceJpaRepository, times(1)).deleteById(deviceId);
     }
@@ -85,7 +85,7 @@ class DeviceServiceTest {
     void deleteDeviceByIdShouldNotDeleteDevice() {
         NotFoundException thrown = Assertions.assertThrows(NotFoundException.class, () -> {
             Integer deviceIdToDelete = 300;
-            Mockito.when(deviceJpaRepository.existsById(deviceIdToDelete)).thenReturn(false);
+            when(deviceJpaRepository.existsById(deviceIdToDelete)).thenReturn(false);
             deviceService.deleteDeviceById(deviceIdToDelete);
         });
         assertEquals("Nie ma takiego urządzenia", thrown.getMessage());

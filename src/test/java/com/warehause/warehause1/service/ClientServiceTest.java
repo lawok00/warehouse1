@@ -50,7 +50,7 @@ class ClientServiceTest {
     @Test
     void getClientByIdShouldReturnClientById() {
         Client client = new Client(1, "Adam Adamski", 5);
-        Mockito.when(clientJpaRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(client));
+        when(clientJpaRepository.findById(anyInt())).thenReturn(Optional.of(client));
         Optional<Client> retrievedClient = Optional.ofNullable(clientService.getClientById(1));
         Assertions.assertTrue(retrievedClient.isPresent());
         assertEquals(client, retrievedClient.get());
@@ -69,7 +69,7 @@ class ClientServiceTest {
     @Test
     void saveNewShouldAddAndReturnNewClient() {
         Client client = new Client(1, "Adam Adamski", 5);
-        Mockito.when(clientJpaRepository.save(client)).thenReturn(client);
+        when(clientJpaRepository.save(client)).thenReturn(client);
         Client saveClient = this.clientService.saveNew(client);
         assertEquals(saveClient, client);
     }
@@ -88,7 +88,7 @@ class ClientServiceTest {
     void deleteClientByIdShouldDeleteClient() {
         Integer clientId = 1;
         Client client = new Client(clientId, "Adam Adamski", 5);
-        Mockito.when(clientJpaRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(client));
+        when(clientJpaRepository.findById(anyInt())).thenReturn(Optional.of(client));
         clientService.deleteClientById(clientId);
         verify(clientJpaRepository, times(1)).deleteById(clientId);
     }
@@ -97,7 +97,7 @@ class ClientServiceTest {
     void deleteClientByIdShouldNotDeleteClient() {
         NotFoundException thrown = Assertions.assertThrows(NotFoundException.class, () -> {
             Integer clientIdToDelete = 300;
-            Mockito.when(clientJpaRepository.existsById(clientIdToDelete)).thenReturn(false);
+            when(clientJpaRepository.existsById(clientIdToDelete)).thenReturn(false);
             clientService.deleteClientById(clientIdToDelete);
         });
         assertEquals("Nie ma takiego klienta", thrown.getMessage());
@@ -137,8 +137,8 @@ class ClientServiceTest {
         Client client = new Client(clientId, "Adam Adamski", 5);
         client.setDeviceList(new ArrayList<>());
         Device device = new Device(deviceId, "Daewoo", 100f, "Electronic");
-        Mockito.when(clientJpaRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(client));
-        Mockito.when(deviceService.getDeviceById(Mockito.anyInt())).thenReturn(device);
+        when(clientJpaRepository.findById(anyInt())).thenReturn(Optional.of(client));
+        when(deviceService.getDeviceById(anyInt())).thenReturn(device);
         clientService.addDeviceToClient(clientId, deviceId);
         client.setDeviceList(List.of(device));
         verify(clientJpaRepository, times(1)).save(client);

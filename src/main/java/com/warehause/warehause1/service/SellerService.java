@@ -41,8 +41,7 @@ public class SellerService {
         }
     }
 
-    // TODO: 26.09.2023 change rest of class 
-    public void deleteSellerById(int id){
+        public void deleteSellerById(int id){
         Optional<Seller> sellerToDelete = sellerJpaRepository.findById(id);
         if (sellerToDelete.isPresent()) {            
             for (Client client : sellerToDelete.get().getClients()) {
@@ -52,13 +51,12 @@ public class SellerService {
             sellerJpaRepository.deleteById(id);
         }
     }
-
-    public Optional<Seller> fulSellerUpdate(Integer sellerId, Seller updateSeller){
-        if(sellerJpaRepository.existsById(sellerId)){
+    public Seller fullSellerUpdate(Integer sellerId, Seller updateSeller){
+        if (sellerJpaRepository.existsById(sellerId)) {
             updateSeller.setSellerId(sellerId);
-            return Optional.of(sellerJpaRepository.save(updateSeller));
-        }else{
-            return Optional.empty();
+            return sellerJpaRepository.save(updateSeller);
+        } else {
+            throw new NotFoundException("Nie ma takiego sprzedawcy");
         }
     }
     public Optional<Seller> setSellerForClient(Integer clientId, Integer sellerId) {

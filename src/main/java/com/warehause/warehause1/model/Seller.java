@@ -30,6 +30,14 @@ public class Seller {
     private List<Client> clients;
     public Seller() {
     }
+
+    public Seller(Integer sellerId, String sellerName, String sellerLevel, Integer sellerAge) {
+        this.sellerId = sellerId;
+        this.sellerName = sellerName;
+        this.sellerLevel = sellerLevel;
+        this.sellerAge = sellerAge;
+    }
+
     public Importer getImporter() {
         return importer;
     }
